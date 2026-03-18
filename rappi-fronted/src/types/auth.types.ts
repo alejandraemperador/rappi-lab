@@ -19,7 +19,7 @@ export interface CreateUserDTO {
     name?: string | null;
     password: string;
     role: UserRole;
-    storeName?: string;
+    storename?: string;
 }
 
 export interface AuthenticateUserDTO {

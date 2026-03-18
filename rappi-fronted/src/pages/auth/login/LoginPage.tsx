@@ -15,9 +15,9 @@ export default function LoginPage() {
             const data = await login(credentials);
 
             localStorage.setItem('token', data.session.access_token);
-            localStorage.setItem('userId', data.user.id);
-            localStorage.setItem('userRole', data.user.user_metadata.role);
-            localStorage.setItem('userName', data.user.user_metadata.name);
+            localStorage.setItem('userid', data.user.id);
+            localStorage.setItem('userrole', data.user.user_metadata.role);
+            localStorage.setItem('username', data.user.user_metadata.name);
 
             const role = data.user.user_metadata.role;
 

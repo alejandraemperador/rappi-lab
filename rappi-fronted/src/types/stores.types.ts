@@ -7,7 +7,7 @@ export interface Store {
 
 export interface CreateStoreDTO {
     name: string;
-    userId: string;
+    userid: string;
 }
 
 export interface UpdateStoreStatusDTO {

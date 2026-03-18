@@ -5,11 +5,11 @@ import { CheckCircle, MapPin, Package } from 'lucide-react';
 
 export default function AcceptedOrders() {
     const [orders, setOrders] = useState<any[]>([]);
-    const deliveryId = localStorage.getItem('userId');
+    const deliveryid = localStorage.getItem('userid');
 
     const loadAccepted = async () => {
-        if (!deliveryId) return;
-        const data = await getAcceptedOrders(deliveryId);
+        if (!deliveryid) return;
+        const data = await getAcceptedOrders(deliveryid);
         setOrders(data);
     };
 

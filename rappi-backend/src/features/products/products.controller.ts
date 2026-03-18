@@ -4,24 +4,24 @@ import  Boom  from "@hapi/boom";
 
 // Obtener productos por tienda
 export const getProductsByStoreController = async (req: Request, res: Response) => {
-    const {storeId} = req.params;
-    const products = await getProductsByStoreService (String(storeId));
+    const {storeid} = req.params;
+    const products = await getProductsByStoreService (String(storeid));
 
     return res.json (products);
 };
 
 // Crear producto
 export const createProductController = async (req: Request, res: Response) => {
-    const {name, description, price, imageUrl, storeId} = req.body;
-    if (!name || !price || !storeId) {
+    const {name, description, price, imageurl, storeid} = req.body;
+    if (!name || !price || !storeid) {
         throw Boom.badRequest ('name, price and storeid are required');
     }
     const product = await createProductService ({
         name,
         description,
         price,
-        imageUrl,
-        storeId
+        imageurl,
+        storeid
     });
     return res.json (product)
 };

@@ -17,7 +17,7 @@ export const ProductForm = ({ form, setForm, onSubmit }: Props) => (
             <input required type="number" className="w-full p-4 bg-gray-50 rounded-2xl border-none text-sm font-bold"
                 placeholder="Precio ($)" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} />
             <input className="w-full p-4 bg-gray-50 rounded-2xl border-none text-sm font-bold"
-                placeholder="URL Imagen" value={form.imageUrl} onChange={e=>setForm({...form, imageUrl: e.target.value})} />
+                placeholder="URL Imagen" value={form.imageurl} onChange={e=>setForm({...form, imageurl: e.target.value})} />
             <textarea className="w-full p-4 bg-gray-50 rounded-2xl border-none text-sm font-bold min-h-25"
                 placeholder="Descripción" value={form.description} onChange={e=>setForm({...form, description: e.target.value})} />
             <button className="w-full bg-orange-500 text-white py-4 rounded-lg font-black uppercase text-[10px] tracking-widest shadow-xl hover:bg-orange-600 transition-all mt-4">

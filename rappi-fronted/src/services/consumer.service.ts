@@ -20,8 +20,8 @@ export const getStores = async (): Promise<Store[]> => {
     return response.data;
 };
 
-export const getProductsByStore = async (storeId: string): Promise<Product[]> => {
-    const response = await axios.get(`${API_URL}/products/store/${storeId}`, getAuthHeaders());
+export const getProductsByStore = async (storeid: string): Promise<Product[]> => {
+    const response = await axios.get(`${API_URL}/products/store/${storeid}`, getAuthHeaders());
     return response.data;
 };
 
@@ -30,7 +30,7 @@ export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
     return response.data;
 };
 
-export const getUserOrders = async (userId: string): Promise<Order[]> => {
-    const response = await axios.get(`${API_URL}/orders/user/${userId}`, getAuthHeaders());
+export const getUserOrders = async (userid: string): Promise<Order[]> => {
+    const response = await axios.get(`${API_URL}/orders/user/${userid}`, getAuthHeaders());
     return response.data;
 };

@@ -26,8 +26,8 @@ export const createOrderController = async (req: Request, res: Response, next: N
 
         // CAMBIO AQUÍ: Pasa las llaves que el SERVICIO espera (consumerId, storeId)
         const order = await createOrderService({ 
-            consumerId: consumerid, 
-            storeId: storeid, 
+            consumerid: consumerid, 
+            storeid: storeid, 
             total 
         });
 
@@ -37,7 +37,7 @@ export const createOrderController = async (req: Request, res: Response, next: N
                 orderid: order.id,
                 productid: item.productId,
                 quantity: item.quantity,
-                priceAtTime: item.price
+                priceattime: item.price
             })
         ));
 
@@ -50,8 +50,8 @@ export const createOrderController = async (req: Request, res: Response, next: N
 // Obtener pedidos de una tienda específica
 export const getStoreOrdersController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { storeId } = req.params;
-        const orders = await getStoreOrdersService(String(storeId));
+        const { storeid } = req.params;
+        const orders = await getStoreOrdersService(String(storeid));
         return res.json(orders);
     } catch (error) {
         next(error);
@@ -101,8 +101,8 @@ export const updateOrderStatusController = async (req: Request, res: Response, n
 // Obtener historial de órdenes de un usuario
 export const getUserOrdersController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userId } = req.params;
-        const orders = await getUserOrdersService({ userId: String(userId) });
+        const { userid } = req.params;
+        const orders = await getUserOrdersService({ userid: String(userid) });
         return res.json(orders);
     } catch (error) {
         next(error);
@@ -121,7 +121,7 @@ export const getOrderDetailsController = async (req: Request, res: Response, nex
 };
 
 export const getAcceptedOrdersController = async (req: Request, res: Response) => {
-    const { deliveryId } = req.params;
-    const data = await getAcceptedOrdersService(String(deliveryId));
+    const { deliveryid } = req.params;
+    const data = await getAcceptedOrdersService(String(deliveryid));
     res.json(data);
 };

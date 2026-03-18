@@ -12,20 +12,20 @@ export const getAvailableOrders = async () => {
 };
 
 // Aceptar un pedido
-export const acceptOrder = async (orderId: string, deliveryId: string) => {
-    const response = await axios.patch(`${API_URL}/${orderId}/accept`, {
-        deliveryid: deliveryId
+export const acceptOrder = async (orderid: string, deliveryid: string) => {
+    const response = await axios.patch(`${API_URL}/${orderid}/accept`, {
+        deliveryid: deliveryid
     });
     return response.data;
 };
 
-export const getAcceptedOrders = async (deliveryId: string) => {
-    const response = await axios.get(`${API_URL}/delivery/${deliveryId}`);
+export const getAcceptedOrders = async (deliveryid: string) => {
+    const response = await axios.get(`${API_URL}/delivery/${deliveryid}`);
     return response.data;
 };
 // Finalizar la entrega
-export const updateOrderStatus = async (orderId: string, status: string) => {
-    const response = await axios.patch(`${API_URL}/${orderId}/status`, {
+export const updateOrderStatus = async (orderid: string, status: string) => {
+    const response = await axios.patch(`${API_URL}/${orderid}/status`, {
         status: status
     });
     return response.data;

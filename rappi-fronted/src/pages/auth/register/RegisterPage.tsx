@@ -7,12 +7,12 @@ export default function RegisterPage() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const [formData, setFormData] = useState({
+    const [formdata, setFormData] = useState({
         name: '',
         email: '',
         password: '',
         role: UserRole.CONSUMER as UserRole,
-        storeName: '' 
+        storename: ''
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -20,14 +20,14 @@ export default function RegisterPage() {
         setLoading(true);
 
         const dataToSend: any = {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            role: formData.role
+            name: formdata.name,
+            email: formdata.email,
+            password: formdata.password,
+            role: formdata.role
         };
 
-        if (formData.role === UserRole.STORE) {
-            dataToSend.storeName = formData.storeName;
+        if (formdata.role === UserRole.STORE) {
+            dataToSend.storeName = formdata.storename;
         }
 
         try {
@@ -60,7 +60,7 @@ export default function RegisterPage() {
                         type="text"
                         placeholder="Tu nombre completo"
                         required
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) => setFormData({ ...formdata, name: e.target.value })}
                     />
 
                     <input
@@ -68,7 +68,7 @@ export default function RegisterPage() {
                         type="email"
                         placeholder="correo@ejemplo.com"
                         required
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) => setFormData({ ...formdata, email: e.target.value })}
                     />
 
                     <input
@@ -76,15 +76,15 @@ export default function RegisterPage() {
                         type="password"
                         placeholder="Contraseña segura"
                         required
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        onChange={(e) => setFormData({ ...formdata, password: e.target.value })}
                     />
 
                     <div className="flex flex-col gap-1">
                         <label className="text-xs font-bold text-gray-400 uppercase ml-1">¿Qué quieres hacer?</label>
                         <select
                             className="border-2 border-orange-100 p-3 rounded-xl outline-none bg-orange-50 text-orange-700 font-bold"
-                            value={formData.role}
-                            onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                            value={formdata.role}
+                            onChange={(e) => setFormData({ ...formdata, role: e.target.value as UserRole })}
                         >
                             <option value={UserRole.CONSUMER}>Quiero comprar comida</option>
                             <option value={UserRole.STORE}>Tengo un Restaurante / Tienda</option>
@@ -92,15 +92,15 @@ export default function RegisterPage() {
                         </select>
                     </div>
 
-                    {formData.role === UserRole.STORE && (
+                    {formdata.role === UserRole.STORE && (
                         <div className="p-4 bg-orange-100 rounded-xl border-2 border-orange-200 animate-in fade-in duration-300">
                             <label className="text-xs font-black text-orange-700 uppercase block mb-2">Configuración de tu Tienda</label>
                             <input
                                 className="w-full border-2 border-white p-2.5 rounded-lg outline-orange-400 bg-white placeholder:text-gray-300"
                                 type="text"
                                 placeholder="Nombre comercial de la tienda"
-                                required={formData.role === UserRole.STORE}
-                                onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
+                                required={formdata.role === UserRole.STORE}
+                                onChange={(e) => setFormData({ ...formdata, storename: e.target.value })}
                             />
                             <p className="text-[10px] text-orange-600 mt-2 italic font-medium">
                                 * Al registrarte, crearemos tu perfil de administrador de tienda automáticamente.

@@ -10,15 +10,15 @@ export default function StoreLanding() {
     const [store, setStore] = useState<any>(null);
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [form, setForm] = useState({ name: '', price: '', imageUrl: '', description: '' });
+    const [form, setForm] = useState({ name: '', price: '', imageurl: '', description: '' });
 
-    const userId = localStorage.getItem('userId');
-    const userName = localStorage.getItem('userName') || '';
+    const userid = localStorage.getItem('userid');
+    const username = localStorage.getItem('username') || '';
 
     const loadData = async () => {
-        if (!userId) return;
+        if (!userid) return;
         try {
-            const storeData = await getMyStore(userId);
+            const storeData = await getMyStore(userid);
             setStore(storeData);
             const productsData = await getProductsByStore(storeData.id);
             setProducts(productsData);
@@ -29,13 +29,13 @@ export default function StoreLanding() {
         }
     };
 
-    useEffect(() => { loadData(); }, [userId]);
+    useEffect(() => { loadData(); }, [userid]);
 
     const handleAddProduct = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await createProduct({ ...form, storeId: store.id, price: Number(form.price) });
-            setForm({ name: '', price: '', imageUrl: '', description: '' });
+            await createProduct({ ...form, storeid: store.id, price: Number(form.price) });
+            setForm({ name: '', price: '', imageurl: '', description: '' });
             loadData();
         } catch (err) { alert("Error al crear producto"); }
     };
@@ -58,7 +58,7 @@ export default function StoreLanding() {
             <main className="max-w-6xl mx-auto px-6 py-10">
                 <StoreHeader
                     name={store?.name}
-                    userName={userName}
+                    userName={username}
                     isOpen={store?.isopen}
                     onToggle={async () => setStore(await toggleStoreStatus(store.id, !store.isopen))}
                 />

@@ -20,7 +20,7 @@ export default function StoreDetail() {
     const [storeName, setStoreName] = useState("");
     const [loading, setLoading] = useState(true);
 
-    const userId = localStorage.getItem('userId');
+    const userid = localStorage.getItem('userid');
 
     useEffect(() => {
         if (!id) {
@@ -65,14 +65,14 @@ export default function StoreDetail() {
         });
     };
 
-    const removeFromCart = (productId: string) => {
-        setCart(prev => prev.filter(item => item.id !== productId));
+    const removeFromCart = (productid: string) => {
+        setCart(prev => prev.filter(item => item.id !== productid));
     };
 
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
 const handleFinalize = async () => {
-    if (!userId) {
+    if (!userid) {
         alert("Inicia sesión para realizar el pedido");
         return;
     }
@@ -84,7 +84,7 @@ const handleFinalize = async () => {
 
     try {
         const orderData = {
-            consumerid: userId,
+            consumerid: userid,
             storeid: id as string,
             total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
             items: cart.map((item) => ({

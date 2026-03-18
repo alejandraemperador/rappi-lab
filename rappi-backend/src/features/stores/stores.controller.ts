@@ -7,8 +7,8 @@ export const getStoresController = async (req: Request, res: Response) => {
     return res.json(stores);
 }
 export const getStoreByUserIdController = async (req: Request, res: Response) => {
-    const { userId } = req.params;
-    const store = await getStoreByUserIdService(String(userId));
+    const { userid } = req.params;
+    const store = await getStoreByUserIdService(String(userid));
     
     if (!store) {
         throw Boom.notFound("Este usuario no tiene una tienda asignada");
@@ -17,12 +17,12 @@ export const getStoreByUserIdController = async (req: Request, res: Response) =>
 }
 
 export const createStoreController = async (req: Request, res: Response) => {
-    const { name, userId } = req.body;
+    const { name, userid } = req.body;
     
-    if (!name || !userId) {
+    if (!name || !userid) {
         throw Boom.badRequest("name and userid are required");
     }
-    const store = await createStoreService({ name, userId })
+    const store = await createStoreService({ name, userid })
     return res.json(store);
 }
 

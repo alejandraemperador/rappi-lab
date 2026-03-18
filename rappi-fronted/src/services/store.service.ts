@@ -5,29 +5,29 @@ const getAuthHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
 });
 
-export const getMyStore = async (userId: string) => {
-    const response = await axios.get(`${API_URL}/stores/user/${userId}`, getAuthHeaders());
+export const getMyStore = async (userid: string) => {
+    const response = await axios.get(`${API_URL}/stores/user/${userid}`, getAuthHeaders());
     return response.data;
 };
 
-export const toggleStoreStatus = async (storeId: string, isOpen: boolean) => {
-    const response = await axios.patch(`${API_URL}/stores/${storeId}/status`, { isopen: isOpen }, getAuthHeaders());
+export const toggleStoreStatus = async (storeid: string, isopen: boolean) => {
+    const response = await axios.patch(`${API_URL}/stores/${storeid}/status`, { isopen: isopen }, getAuthHeaders());
     return response.data;
 };
 
-export const createProduct = async (productData: any) => {
+export const createProduct = async (productdata: any) => {
     const dataToSend = {
-        name: productData.name,
-        description: productData.description,
-        price: Number(productData.price),
-        imageUrl: productData.imageUrl,
-        storeId: productData.storeId
+        name: productdata.name,
+        description: productdata.description,
+        price: Number(productdata.price),
+        imageUrl: productdata.imageurl,
+        storeId: productdata.storeid
     };
     const response = await axios.post(`${API_URL}/products`, dataToSend, getAuthHeaders());
     return response.data;
 };
 
-export const deleteProduct = async (productId: string) => {
-    const response = await axios.delete(`${API_URL}/products/${productId}`, getAuthHeaders());
+export const deleteProduct = async (productid: string) => {
+    const response = await axios.delete(`${API_URL}/products/${productid}`, getAuthHeaders());
     return response.data;
 };

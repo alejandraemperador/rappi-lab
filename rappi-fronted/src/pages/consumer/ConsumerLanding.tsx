@@ -10,7 +10,7 @@ import { StoreCard } from '../../components/consumer/landing/StoreCard';
 export default function ConsumerLanding() {
     const navigate = useNavigate();
     const [stores, setStores] = useState<Store[]>([]);
-    const userName = localStorage.getItem('userName') || 'usuario';
+    const username = localStorage.getItem('username') || 'usuario';
 
     useEffect(() => {
         const fetchStores = async () => {
@@ -33,7 +33,7 @@ export default function ConsumerLanding() {
     return (
         <div className="min-h-screen bg-white font-sans">
             <Navbar onLogout={handleLogout} />
-            <WelcomeBanner userName={userName} />
+            <WelcomeBanner username={username} />
 
             <main className="max-w-6xl mx-auto px-10 py-12">
                 <div className="flex items-center gap-3 mb-8">
@@ -47,7 +47,7 @@ export default function ConsumerLanding() {
                             <StoreCard
                                 key={store.id}
                                 store={store}
-                                onClick={(id) => navigate(`/store/${id}`, { state: { storeName: store.name } })}
+                                onClick={(id) => navigate(`/store/${id}`, { state: { storename: store.name } })}
                             />
                         ))
                     ) : (

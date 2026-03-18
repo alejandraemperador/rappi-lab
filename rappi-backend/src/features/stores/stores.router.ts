@@ -11,7 +11,6 @@ export const router = Router();
 // Obtener todas las tiendas
 router.get('/', getStoresController);
 
-// NUEVO: Obtener la tienda de un usuario (Dueño)
 router.get('/user/:userId', getStoreByUserIdController);
 
 // Crear tienda

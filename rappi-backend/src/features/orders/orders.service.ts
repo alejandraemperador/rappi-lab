@@ -3,12 +3,12 @@ import { Order, AcceptOrderDTO, UpdateOrderStatusDTO } from "./orders.types";
 
 // 1. Crear una nueva orden
 export const createOrderService = async (data: any) => {
-    const { consumerId, storeId, total, items } = data;
+    const { consumerid, storeid, total, items } = data;
 
     // Aseguramos que los nombres de las columnas en el INSERT sean minúsculas
     const orderRes = await pool.query(
         'INSERT INTO orders (consumerid, storeid, total) VALUES ($1, $2, $3) RETURNING *',
-        [consumerId, storeId, total]
+        [consumerid, storeid, total]
     );
     const newOrder = orderRes.rows[0];
 
@@ -19,7 +19,7 @@ export const createOrderService = async (data: any) => {
                 'INSERT INTO order_items (orderid, productid, quantity, priceattime) VALUES ($1, $2, $3, $4)',
                 [
                     newOrder.id, 
-                    item.productId || item.productid, // Soporta ambos por si acaso
+                    item.productid || item.productid, // Soporta ambos por si acaso
                     item.quantity, 
                     item.price || item.priceattime    // Soporta ambos
                 ]
@@ -30,8 +30,8 @@ export const createOrderService = async (data: any) => {
 };
 
 // 2. Obtener pedidos de un usuario específico
-export const getUserOrdersService = async (data: { userId: string }): Promise<Order[]> => {
-    const { userId } = data;
+export const getUserOrdersService = async (data: { userid: string }): Promise<Order[]> => {
+    const { userid } = data;
     const query = `
         SELECT 
             o.*, 
@@ -50,12 +50,12 @@ export const getUserOrdersService = async (data: { userId: string }): Promise<Or
         WHERE o.consumerid = $1
         ORDER BY o.createdat DESC
     `;
-    const dbRequest = await pool.query(query, [userId]);
+    const dbRequest = await pool.query(query, [userid]);
     return dbRequest.rows;
 };
 
 // 3. Obtener pedidos de una tienda
-export const getStoreOrdersService = async (storeId: string): Promise<any[]> => {
+export const getStoreOrdersService = async (storeid: string): Promise<any[]> => {
     const query = `
         SELECT 
             o.id, o.total, o.status, o.createdat,
@@ -76,7 +76,7 @@ export const getStoreOrdersService = async (storeId: string): Promise<any[]> => 
         WHERE o.storeid = $1
         ORDER BY o.createdat DESC
     `;
-    const result = await pool.query(query, [storeId]);
+    const result = await pool.query(query, [storeid]);
     return result.rows;
 };
 
@@ -99,7 +99,7 @@ export const getAvailableOrdersService = async (): Promise<Order[]> => {
 
 // 5. Aceptar pedido
 export const acceptOrderService = async (data: AcceptOrderDTO): Promise<Order> => {
-    const { id, deliveryid } = data; // Asegúrate que en el DTO sea minúscula o mapealo aquí
+    const { id, deliveryid } = data; 
     const dbRequest = await pool.query(
         `UPDATE orders SET deliveryid = $2, status = 'accepted' WHERE id = $1 RETURNING *`,
         [id, deliveryid]
@@ -118,7 +118,7 @@ export const updateOrderStatusService = async (data: UpdateOrderStatusDTO): Prom
 };
 
 // 7. Pedidos aceptados por un repartidor
-export const getAcceptedOrdersService = async (deliveryId: string): Promise<any[]> => {
+export const getAcceptedOrdersService = async (deliveryid: string): Promise<any[]> => {
     const query = `
         SELECT 
             o.*, 
@@ -139,6 +139,6 @@ export const getAcceptedOrdersService = async (deliveryId: string): Promise<any[
         WHERE o.deliveryid = $1 AND o.status != 'delivered'
         ORDER BY o.createdat DESC;
     `;
-    const dbRequest = await pool.query(query, [deliveryId]);
+    const dbRequest = await pool.query(query, [deliveryid]);
     return dbRequest.rows;
 };

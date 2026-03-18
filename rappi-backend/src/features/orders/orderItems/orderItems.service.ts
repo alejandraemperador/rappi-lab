@@ -4,11 +4,11 @@ import { CreateOrderItemDTO } from "./orderItems.types";
 
 export const createOrderItemService = async (data: CreateOrderItemDTO) => {
 
-    const { orderid, productid, quantity, priceAtTime } = data;
+    const { orderid, productid, quantity, priceattime } = data;
     await pool.query(
     `INSERT INTO order_items (orderId, productid, quantity, priceattime)
     VALUES ($1,$2,$3,$4)`,
-        [orderid, productid, quantity, priceAtTime]
+        [orderid, productid, quantity, priceattime]
     );
 
 };

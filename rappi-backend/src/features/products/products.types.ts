@@ -11,6 +11,6 @@ export interface CreateProductDTO {
     name: string;
     description: string;
     price: number;
-    imageUrl: string;
-    storeId: string;
+    imageurl: string;
+    storeid: string;
 }

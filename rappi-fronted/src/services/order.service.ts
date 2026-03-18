@@ -21,8 +21,8 @@ export const getStores = async (): Promise<Store[]> => {
 };
 
 // 2. Obtener productos de una tienda (Para StoreDetail y StoreLanding)
-export const getProductsByStore = async (storeId: string): Promise<Product[]> => {
-    const response = await axios.get(`${API_URL}/products/stores/${storeId}`, getAuthHeaders());
+export const getProductsByStore = async (storeid: string): Promise<Product[]> => {
+    const response = await axios.get(`${API_URL}/products/stores/${storeid}`, getAuthHeaders());
     return response.data;
 };
 
@@ -33,13 +33,13 @@ export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
 };
 
 // 4. Obtener órdenes de un USUARIO (Para la página Mis Pedidos / Orders.tsx)
-export const getUserOrders = async (userId: string): Promise<Order[]> => {
-    const response = await axios.get(`${API_URL}/orders/user/${userId}`, getAuthHeaders());
+export const getUserOrders = async (userid: string): Promise<Order[]> => {
+    const response = await axios.get(`${API_URL}/orders/user/${userid}`, getAuthHeaders());
     return response.data;
 };
 
 // 5. Obtener órdenes de una TIENDA (Para el Dashboard del dueño / StoreOrders.tsx)
-export const getStoreOrders = async (storeId: string): Promise<any> => {
-    const response = await axios.get(`${API_URL}/orders/store/${storeId}`, getAuthHeaders());
+export const getStoreOrders = async (storeid: string): Promise<any> => {
+    const response = await axios.get(`${API_URL}/orders/store/${storeid}`, getAuthHeaders());
     return response.data;
 };

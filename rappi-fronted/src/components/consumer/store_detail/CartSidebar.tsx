@@ -1,5 +1,5 @@
 import { ShoppingBasket, Trash2 } from 'lucide-react';
-import type { CartItem } from '../../../pages/consumer/StoreDetail'; // Importamos el tipo
+import type { CartItem } from '../../../pages/consumer/StoreDetail';
 
 interface CartSidebarProps {
     cart: CartItem[];

@@ -8,12 +8,12 @@ import { EmptyOrders } from '../../components/store/orders/EmptyOrders';
 export default function StoreOrders() {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const userId = localStorage.getItem('userId');
+    const userid = localStorage.getItem('userid');
 
     const loadOrders = async () => {
-        if (!userId) return;
+        if (!userid) return;
         try {
-            const store = await getMyStore(userId);
+            const store = await getMyStore(userid);
             const data = await getStoreOrders(store.id);
             setOrders(data);
         } catch (error) {
@@ -27,7 +27,7 @@ export default function StoreOrders() {
         loadOrders();
         const interval = setInterval(loadOrders, 5000);
         return () => clearInterval(interval);
-    }, [userId]);
+    }, [userid]);
 
     if (loading) return (
         <div className="min-h-screen bg-[#F8F9FA]">

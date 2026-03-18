@@ -6,7 +6,7 @@ import { Truck, MapPin, DollarSign } from 'lucide-react';
 
 export default function DeliveryLanding() {
     const [orders, setOrders] = useState<any[]>([]);
-    const deliveryId = localStorage.getItem('userId');
+    const deliveryid = localStorage.getItem('userid');
     const navigate = useNavigate();
 
     const loadAvailable = async () => {
@@ -25,10 +25,10 @@ export default function DeliveryLanding() {
     }, []);
 
     const handleAccept = async (id: string) => {
-        if (!deliveryId) return alert("No se encontró ID de repartidor. Por favor, inicia sesión.");
+        if (!deliveryid) return alert("No se encontró ID de repartidor. Por favor, inicia sesión.");
 
         try {
-            await acceptOrder(id, deliveryId);
+            await acceptOrder(id, deliveryid);
             alert("¡Pedido aceptado! Redirigiendo a tus entregas...");
             navigate('/delivery-accepted');
         } catch (e) {
@@ -45,7 +45,6 @@ export default function DeliveryLanding() {
                     {orders.length > 0 ? (
                         orders.map(order => (
                             <div key={order.id} className="bg-white p-6 rounded-[30px] shadow-sm border border-gray-100 flex flex-col gap-4">
-                                {/* Cabecera: ID y Monto Total */}
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className="text-[10px] font-black text-orange-500 uppercase tracking-widest">Disponible ahora</p>

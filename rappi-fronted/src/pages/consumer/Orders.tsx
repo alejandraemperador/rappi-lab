@@ -9,14 +9,14 @@ export default function Orders() {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const userId = localStorage.getItem('userId');
+    const userid = localStorage.getItem('userId');
 
     useEffect(() => {
-        if (!userId) { navigate('/login'); return; }
+        if (!userid) { navigate('/login'); return; }
 
         const fetchOrders = async () => {
             try {
-                const data = await getUserOrders(userId);
+                const data = await getUserOrders(userid);
                 setOrders(data);
             } catch (error) {
                 console.error("Error:", error);
@@ -28,19 +28,19 @@ export default function Orders() {
         fetchOrders();
         const interval = setInterval(fetchOrders, 10000);
         return () => clearInterval(interval);
-    }, [userId]);
+    }, [userid]);
 
     const groupedOrders = orders.reduce((acc: any, order) => {
-        const storeName = order.store_name || "Tienda";
-        if (!acc[storeName]) acc[storeName] = { items: [], subtotal: 0 };
+        const storename = order.store_name || "Tienda";
+        if (!acc[storename]) acc[storename] = { items: [], subtotal: 0 };
 
         order.items?.forEach((item: any) => {
-            acc[storeName].items.push({
+            acc[storename].items.push({
                 ...item,
-                deliveryid: order.deliveryid, 
+                deliveryid: order.deliveryid,
                 orderId: order.id
             });
-            acc[storeName].subtotal += (item.price * item.quantity);
+            acc[storename].subtotal += (item.price * item.quantity);
         });
 
         return acc;
@@ -64,19 +64,19 @@ export default function Orders() {
                 <div className="space-y-12">
                     {loading ? (
                         <div className="animate-pulse space-y-4"><div className="h-32 bg-white rounded-3xl" /></div>
-                    ) : Object.keys(groupedOrders).map(storeName => (
-                        <div key={storeName} className="space-y-4">
-                            <h3 className="text-xl font-black text-orange-500 italic ml-2 tracking-tight">{storeName}</h3>
+                    ) : Object.keys(groupedOrders).map(storename => (
+                        <div key={storename} className="space-y-4">
+                            <h3 className="text-xl font-black text-orange-500 italic ml-2 tracking-tight">{storename}</h3>
 
                             <div className="space-y-3">
-                                {groupedOrders[storeName].items.map((item: any, index: number) => (
+                                {groupedOrders[storename].items.map((item: any, index: number) => (
                                     <OrderCard key={`${item.id}-${index}`} item={item} />
                                 ))}
                             </div>
 
                             <div className="bg-orange-500 rounded-2xl p-3 flex justify-between items-center px-8 shadow-lg shadow-orange-100">
                                 <span className="text-white font-black italic text-lg">Subtotal:</span>
-                                <span className="text-white font-black text-lg">${groupedOrders[storeName].subtotal.toLocaleString()}</span>
+                                <span className="text-white font-black text-lg">${groupedOrders[storename].subtotal.toLocaleString()}</span>
                             </div>
                         </div>
                     ))}

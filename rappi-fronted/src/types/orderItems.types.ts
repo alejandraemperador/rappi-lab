@@ -3,12 +3,12 @@ export interface OrderItem {
     orderid: string;
     productid: string;
     quantity: number;
-    priceAtTime: number;
+    priceattime: number;
 }
 
 export interface CreateOrderItemDTO {
     orderid: string;
     productid: string;
     quantity: number;
-    priceAtTime: number;
+    priceattime: number;
 }

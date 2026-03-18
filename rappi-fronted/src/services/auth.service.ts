@@ -3,8 +3,8 @@ import type { CreateUserDTO, AuthenticateUserDTO } from "../types/auth.types";
 
 const API_URL = "https://rappi-lab-backend-nine.vercel.app/api/auth";
 
-export const register = async (userData: CreateUserDTO) => {
-    const response = await axios.post(`${API_URL}/register`, userData);
+export const register = async (userdata: CreateUserDTO) => {
+    const response = await axios.post(`${API_URL}/register`, userdata);
     return response.data;
 };
 

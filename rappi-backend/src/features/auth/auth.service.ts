@@ -57,13 +57,13 @@ export const createUserService = async (
 
     if (user.role === UserRole.STORE) {
 
-      if (!user.storeName || user.storeName.trim() === '') {
+      if (!user.storename || user.storename.trim() === '') {
         throw Boom.badRequest('Store name is required for store role');
       }
 
       await pool.query(
         `INSERT INTO stores (name, userId) VALUES ($1, $2)`,
-        [user.storeName, authUser.id]
+        [user.storename, authUser.id]
       );
     }
 

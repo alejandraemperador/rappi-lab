@@ -10,18 +10,18 @@ export const getStoresService = async (): Promise<Store[]> => {
 }
 
 // NUEVO: Obtener la tienda de un dueño específico (Para el admin de la tienda)
-export const getStoreByUserIdService = async (userId: string): Promise<Store | null> => {
+export const getStoreByUserIdService = async (userid: string): Promise<Store | null> => {
     const dbRequest = await pool.query(
         'SELECT * FROM stores WHERE userid = $1',
-        [userId]
+        [userid]
     );
     return dbRequest.rows[0] || null;
 }
 
 // Crear una tienda
 export const createStoreService = async (data: CreateStoreDTO): Promise<Store> => {
-    const { name, userId } = data;
-    const userCheck = await pool.query('SELECT role FROM users WHERE id = $1', [userId]);
+    const { name, userid } = data;
+    const userCheck = await pool.query('SELECT role FROM users WHERE id = $1', [userid]);
 
     if (userCheck.rows.length === 0) throw Boom.notFound("The user doesnt exist");
     
@@ -30,7 +30,7 @@ export const createStoreService = async (data: CreateStoreDTO): Promise<Store> =
 
     const dbRequest = await pool.query(
         `INSERT INTO stores (name, userid) VALUES ($1, $2) RETURNING *`,
-        [name, userId]
+        [name, userid]
     );
     return dbRequest.rows[0];
 }
@@ -45,11 +45,11 @@ export const updateStoreStatusService = async (data: UpdateStoreStatusDTO): Prom
     return dbRequest.rows[0];
 }
 
-export const deleteProductService = async (productId: string) => {
+export const deleteProductService = async (productid: string) => {
     // 1. Verificar si el producto tiene pedidos asociados
     const orderCheck = await pool.query(
         'SELECT 1 FROM order_items WHERE productid = $1 LIMIT 1',
-        [productId]
+        [productid]
     );
 
     if (orderCheck.rows.length > 0) {
@@ -57,6 +57,6 @@ export const deleteProductService = async (productId: string) => {
     }
 
     // 2. Si no tiene pedidos, borrar
-    const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [productId]);
+    const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [productid]);
     return result.rows[0];
 };
