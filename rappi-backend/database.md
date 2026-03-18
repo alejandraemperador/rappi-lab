@@ -65,15 +65,15 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE stores (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
-    isOpen BOOLEAN DEFAULT false,
-    userId UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    isopen BOOLEAN DEFAULT false,
+    userid UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 ```
 ## Store SQL Queries
 
 ### getStores
 ```sql
-SELECT * FROM stores WHERE isOpen = true;
+SELECT * FROM stores WHERE isopen = true;
 ```
 ### getStoreById
 ```sql
@@ -81,13 +81,13 @@ SELECT * FROM stores WHERE id = $1;
 ```
 ### createStore
 ```sql
-INSERT INTO stores (name, userId) VALUES ($1, $2) 
+INSERT INTO stores (name, userid) VALUES ($1, $2) 
 RETURNING *;
 ```
 ### updateStoreStatus
 -- Para abrir o cerrar la tienda
 ```sql
-UPDATE stores SET isOpen = $1 WHERE id = $2 RETURNING *;
+UPDATE stores SET isopen = $1 WHERE id = $2 RETURNING *;
 ```
 
 ### Products
@@ -99,8 +99,8 @@ CREATE TABLE products (
     name TEXT NOT NULL,
     description TEXT,
     price INTEGER NOT NULL,
-    imageUrl TEXT,
-    storeId UUID NOT NULL REFERENCES stores(id) ON DELETE CASCADE
+    imageurl TEXT,
+    storeid UUID NOT NULL REFERENCES stores(id) ON DELETE CASCADE
 );
 ```
 ## Products SQL Queries
@@ -108,12 +108,12 @@ CREATE TABLE products (
 ### getProductsByStore
 -- Para que el consumidor vea el menú de una tienda
 ```sql
-SELECT * FROM products WHERE storeId = $1;
+SELECT * FROM products WHERE storeid = $1;
 ```
 ### createProduct
 -- Para que el administrador de la tienda cree productos
 ```sql
-INSERT INTO products (name, description, price, imageUrl, storeId)
+INSERT INTO products (name, description, price, imageurl, storeid)
 VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
 ```
@@ -128,12 +128,12 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    consumerId UUID NOT NULL REFERENCES users(id),
-    storeId UUID NOT NULL REFERENCES stores(id),
-    deliveryId UUID REFERENCES users(id),
+    consumerid UUID NOT NULL REFERENCES users(id),
+    storeid UUID NOT NULL REFERENCES stores(id),
+    deliveryid UUID REFERENCES users(id),
     status TEXT DEFAULT 'pending',
     total INTEGER DEFAULT 0,
-    createdAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    createdat TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
 ## Orders SQL Queries
@@ -141,7 +141,7 @@ CREATE TABLE orders (
 ### createOrder
 -- El consumidor crea la orden (paso 1)
 ```sql
-INSERT INTO orders (consumerId, storeId, total)
+INSERT INTO orders (consumerid, storeid, total)
 VALUES ($1, $2, $3)
 RETURNING *;
 ```
@@ -153,7 +153,7 @@ SELECT * FROM orders WHERE status = 'pending' AND deliveryId IS NULL;
 ### acceptOrder
 -- El repartidor acepta el pedido (paso 2)
 ```sql
-UPDATE orders SET deliveryId = $2, status = 'accepted' WHERE id = $1 RETURNING *;
+UPDATE orders SET deliveryid = $2, status = 'accepted' WHERE id = $1 RETURNING *;
 ```
 ### updateOrderStatus
 -- Para cambiar a 'ready', 'on_way' o 'delivered'
@@ -162,7 +162,7 @@ UPDATE orders SET status = $2 WHERE id= $1 RETURNING *;
 ```
 ### getUserOrders
 ```sql
-SELECT * FROM orders WHERE consumerId = $1 OR deliveryId = $1 ORDER BY createdAt DESC;
+SELECT * FROM orders WHERE consumerid = $1 OR deliveryId = $1 ORDER BY createdat DESC;
 ```
 
 ### Orders_items
@@ -171,10 +171,10 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE order_items (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    orderId UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    productId UUID NOT NULL REFERENCES products(id),
+    orderid UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    productid UUID NOT NULL REFERENCES products(id),
     quantity INTEGER NOT NULL,
-    priceAtTime INTEGER NOT NULL
+    priceattime INTEGER NOT NULL
 )
 ```
 ## Order_items SQL Queries
@@ -182,7 +182,7 @@ CREATE TABLE order_items (
 ### createOrderItem
 -- Se ejecuta por cada producto del carrito al crear la orden
 ```sql
-INSERT INTO order_items (orderId, productId, quantity, priceAtTime)
+INSERT INTO order_items (orderid, productid, quantity, priceattime)
 VALUES ($1, $2, $3, $4);
 ```
 ### getOrderDetails
@@ -190,6 +190,6 @@ VALUES ($1, $2, $3, $4);
 ```sql
 SELECT oi.*, p.name
 FROM order_items oi
-JOIN products p ON oi.productId = p.id
-WHERE oi.orderId = $1;
+JOIN products p ON oi.productid = p.id
+WHERE oi.orderid = $1;
 ```

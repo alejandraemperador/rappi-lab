@@ -62,7 +62,7 @@ export const createUserService = async (
       }
 
       await pool.query(
-        `INSERT INTO stores (name, userId) VALUES ($1, $2)`,
+        `INSERT INTO stores (name, userid) VALUES ($1, $2)`,
         [user.storename, authUser.id]
       );
     }
