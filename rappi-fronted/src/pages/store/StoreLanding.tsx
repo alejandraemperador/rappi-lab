@@ -58,9 +58,9 @@ export default function StoreLanding() {
             <main className="max-w-6xl mx-auto px-6 py-10">
                 <StoreHeader
                     name={store?.name}
-                    userName={username}
-                    isOpen={store?.isopen}
-                    onToggle={async () => setStore(await toggleStoreStatus(store.id, !store.isopen))}
+                    username={username}
+                    isopen={store?.isopen}
+                    ontoggle={async () => setStore(await toggleStoreStatus(store.id, !store.isopen))}
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
