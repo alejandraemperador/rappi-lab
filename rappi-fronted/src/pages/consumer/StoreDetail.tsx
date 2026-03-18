@@ -71,41 +71,42 @@ export default function StoreDetail() {
 
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-const handleFinalize = async () => {
-    if (!userid) {
-        alert("Inicia sesión para realizar el pedido");
-        return;
-    }
-
-    if (cart.length === 0) {
-        alert("El carrito está vacío");
-        return;
-    }
-
-    try {
-        const orderData = {
-            consumerid: userid,
-            storeid: id as string,
-            total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
-            items: cart.map((item) => ({
-                productid: item.id,
-                quantity: item.quantity,
-                price: Number(item.price)
-            }))
-        };
-
-        console.log("Enviando pedido:", orderData);
-
-        const response = await createOrder(orderData);
-
-        if (response) {
-            alert("¡Pedido realizado con éxito!");
+    const handleFinalize = async () => {
+        if (!userid) {
+            alert("Inicia sesión para realizar el pedido");
+            return;
         }
-    } catch (error) {
-        console.error("Error al crear el pedido:", error);
-        alert("No se pudo procesar el pedido");
-    }
-};
+
+        if (cart.length === 0) {
+            alert("El carrito está vacío");
+            return;
+        }
+
+        try {
+            const orderData = {
+                consumerid: userid,
+                storeid: id as string,
+                total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+                items: cart.map((item) => ({
+                    productid: item.id,
+                    quantity: item.quantity,
+                    price: Number(item.price)
+                }))
+            };
+
+            console.log("Enviando pedido:", orderData);
+
+            const response = await createOrder(orderData);
+
+            if (response) {
+                alert("¡Pedido realizado con éxito!");
+                navigate('/orders');
+            }
+        } catch (error) {
+            console.error("Error al crear el pedido:", error);
+            alert("No se pudo procesar el pedido");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#F8F9FA] font-sans">

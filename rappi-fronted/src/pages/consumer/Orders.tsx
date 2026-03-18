@@ -9,7 +9,7 @@ export default function Orders() {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const userid = localStorage.getItem('userId');
+    const userid = localStorage.getItem('userid');
 
     useEffect(() => {
         if (!userid) { navigate('/login'); return; }
@@ -34,13 +34,16 @@ export default function Orders() {
         const storename = order.store_name || "Tienda";
         if (!acc[storename]) acc[storename] = { items: [], subtotal: 0 };
 
+        // Añade el encadenamiento opcional (?.) para evitar errores
         order.items?.forEach((item: any) => {
+            const price = Number(item.price || item.priceattime || 0);
             acc[storename].items.push({
                 ...item,
+                price: price, // Normaliza el nombre del precio
                 deliveryid: order.deliveryid,
                 orderId: order.id
             });
-            acc[storename].subtotal += (item.price * item.quantity);
+            acc[storename].subtotal += (price * item.quantity);
         });
 
         return acc;
