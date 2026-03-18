@@ -38,6 +38,8 @@ export const createUserService = async (
     },
   });
 
+  console.log('SUPABASE SIGNUP RESPONSE:', signUpResponse);
+  
   if (signUpResponse.error) {
     throw Boom.badRequest(signUpResponse.error.message);
   }

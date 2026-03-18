@@ -13,7 +13,7 @@ export const authenticateUserController = async (
   if (!req.body) {
     throw Boom.badRequest('Request body is required');
   }
-
+  console.log('REGISTER BODY:', req.body);
   const { email, password } = req.body;
 
   if (email === undefined) {
@@ -30,12 +30,15 @@ export const authenticateUserController = async (
 
 
 export const createUserController = async (req: Request, res: Response) => {
+  console.log('REGISTER BODY:', req.body);
   if (!req.body) {
     throw Boom.badRequest('Request body is required');
   }
 
   const { email, name, password, role, storename } = req.body;
-
+  console.log('ROLE RECIBIDO:', role);
+  console.log('ROLES VALIDOS:', Object.values(UserRole));
+  
   if (email === undefined) {
     throw Boom.badRequest('Email is required');
   }
