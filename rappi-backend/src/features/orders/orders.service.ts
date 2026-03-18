@@ -1,12 +1,11 @@
 import { pool } from "../../config/database";
-import { CreateOrderDTO, Order, AcceptOrderDTO, UpdateOrderStatusDTO } from "./orders.types";
+import { Order, AcceptOrderDTO, UpdateOrderStatusDTO } from "./orders.types";
 
-// Crear una nueva orden
-// En src/features/orders/orders.service.ts
-export const createOrderService = async (data: any) => { // Cambia temporalmente a any para probar
-    const { consumerId, storeId, total, items } = data; // Usa CamelCase como en el frontend
+// 1. Crear una nueva orden
+export const createOrderService = async (data: any) => {
+    const { consumerId, storeId, total, items } = data;
 
-    // 1. Crear la orden (Corregido INIO -> INTO y lolal -> total)
+    // Aseguramos que los nombres de las columnas en el INSERT sean minúsculas
     const orderRes = await pool.query(
         'INSERT INTO orders (consumerid, storeid, total) VALUES ($1, $2, $3) RETURNING *',
         [consumerId, storeId, total]
@@ -18,14 +17,19 @@ export const createOrderService = async (data: any) => { // Cambia temporalmente
         for (const item of items) {
             await pool.query(
                 'INSERT INTO order_items (orderid, productid, quantity, priceattime) VALUES ($1, $2, $3, $4)',
-                [newOrder.id, item.productId, item.quantity, item.price]
+                [
+                    newOrder.id, 
+                    item.productId || item.productid, // Soporta ambos por si acaso
+                    item.quantity, 
+                    item.price || item.priceattime    // Soporta ambos
+                ]
             );
         }
     }
     return newOrder;
 };
 
-// Obtener pedidos de un usuario específico (ESTE FALTABA)
+// 2. Obtener pedidos de un usuario específico
 export const getUserOrdersService = async (data: { userId: string }): Promise<Order[]> => {
     const { userId } = data;
     const query = `
@@ -50,7 +54,7 @@ export const getUserOrdersService = async (data: { userId: string }): Promise<Or
     return dbRequest.rows;
 };
 
-// Obtener pedidos específicos de una tienda
+// 3. Obtener pedidos de una tienda
 export const getStoreOrdersService = async (storeId: string): Promise<any[]> => {
     const query = `
         SELECT 
@@ -76,6 +80,7 @@ export const getStoreOrdersService = async (storeId: string): Promise<any[]> => 
     return result.rows;
 };
 
+// 4. Pedidos disponibles para repartidores
 export const getAvailableOrdersService = async (): Promise<Order[]> => {
     const query = `
         SELECT 
@@ -92,8 +97,9 @@ export const getAvailableOrdersService = async (): Promise<Order[]> => {
     return dbRequest.rows;
 };
 
+// 5. Aceptar pedido
 export const acceptOrderService = async (data: AcceptOrderDTO): Promise<Order> => {
-    const { id, deliveryid } = data;
+    const { id, deliveryid } = data; // Asegúrate que en el DTO sea minúscula o mapealo aquí
     const dbRequest = await pool.query(
         `UPDATE orders SET deliveryid = $2, status = 'accepted' WHERE id = $1 RETURNING *`,
         [id, deliveryid]
@@ -101,6 +107,7 @@ export const acceptOrderService = async (data: AcceptOrderDTO): Promise<Order> =
     return dbRequest.rows[0];
 };
 
+// 6. Actualizar estado
 export const updateOrderStatusService = async (data: UpdateOrderStatusDTO): Promise<Order> => {
     const { id, status } = data;
     const dbRequest = await pool.query(
@@ -110,6 +117,7 @@ export const updateOrderStatusService = async (data: UpdateOrderStatusDTO): Prom
     return dbRequest.rows[0];
 };
 
+// 7. Pedidos aceptados por un repartidor
 export const getAcceptedOrdersService = async (deliveryId: string): Promise<any[]> => {
     const query = `
         SELECT 
@@ -118,7 +126,7 @@ export const getAcceptedOrdersService = async (deliveryId: string): Promise<any[
             u.name as customer_name,
             (SELECT json_agg(json_build_object(
                 'product_name', p.name,
-                'product_image', p.imageUrl,
+                'product_image', p.imageurl,
                 'product_price', oi.priceattime,
                 'quantity', oi.quantity
             ))
