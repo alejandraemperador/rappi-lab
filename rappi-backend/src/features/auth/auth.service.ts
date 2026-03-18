@@ -50,26 +50,29 @@ export const createUserService = async (
 
   try {
     await pool.query(
-      `INSERT INTO users (id, email, name, role)
-      VALUES ($1, $2, $3, $4)`,
-      [authUser.id, user.email, user.name, user.role]
+      `INSERT INTO users (id, email, name, password, role)
+      VALUES ($1, $2, $3, $4, $5)`,
+      [authUser.id, user.email, user.name, user.password, user.role]
     );
 
     if (user.role === UserRole.STORE) {
 
-      if (!user.storename || user.storename.trim() === '') {
+      if (!user.storename || typeof user.storename !== 'string' || user.storename.trim() === '') {
         throw Boom.badRequest('Store name is required for store role');
       }
 
       await pool.query(
         `INSERT INTO stores (name, userid) VALUES ($1, $2)`,
-        [user.storename, authUser.id]
+        [user.storename.trim(), authUser.id]
       );
     }
 
-  } catch (error) {
-    console.error('Database sync error:', error);
-    throw Boom.internal("Data base error while creating user");
+  } catch (dbError: any) {
+    console.error('Error insertando tienda:', dbError);
+    if (dbError.code === '23505') { 
+      throw Boom.conflict('El nombre de la tienda ya está en uso');
+    }
+    throw Boom.badImplementation('Error al crear la tienda en la base de datos');
   }
 
   return signUpResponse.data;

@@ -19,25 +19,19 @@ export default function RegisterPage() {
         e.preventDefault();
         setLoading(true);
 
-        const dataToSend: any = {
-            name: formdata.name,
-            email: formdata.email,
+        const dataToSend = {
+            name: formdata.name.trim(),
+            email: formdata.email.trim(),
             password: formdata.password,
-            role: formdata.role
+            role: formdata.role,
+            storename: formdata.role === UserRole.STORE ? formdata.storename.trim() : ""
         };
-
-        if (formdata.role === UserRole.STORE) {
-            dataToSend.storename = formdata.storename;
-        }
 
         try {
             await register(dataToSend);
-            alert("¡Registro completo! Tu cuenta (y tienda si aplica) ha sido creada.");
+            alert("¡Registro completo!");
             navigate('/login');
-
         } catch (error) {
-            console.error("Error en registro:", error);
-            alert("Hubo un error al registrarte. Intenta de nuevo.");
         } finally {
             setLoading(false);
         }
