@@ -27,7 +27,7 @@ export default function RegisterPage() {
         };
 
         if (formdata.role === UserRole.STORE) {
-            dataToSend.storeName = formdata.storename;
+            dataToSend.storename = formdata.storename;
         }
 
         try {
