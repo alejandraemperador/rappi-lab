@@ -21,26 +21,15 @@ export const createOrderController = async (req: Request, res: Response, next: N
         const { consumerid, storeid, total, items } = req.body;
         
         if (!items || !Array.isArray(items) || items.length === 0) {
-            throw Boom.badRequest("La orden debe contener al menos un producto (items)");
+            throw Boom.badRequest("La orden debe contener al menos un producto");
         }
 
-        // CAMBIO AQUÍ: Pasa las llaves que el SERVICIO espera (consumerId, storeId)
         const order = await createOrderService({ 
-            consumerid: consumerid, 
-            storeid: storeid, 
-            total 
+            consumerid, 
+            storeid, 
+            total,
+            items 
         });
-
-        // 2. Creamos los detalles (items)
-        await Promise.all(items.map(item => 
-            createOrderItemService({
-                orderid: order.id,
-                productid: item.productId,
-                quantity: item.quantity,
-                priceattime: item.price
-            })
-        ));
-
         return res.status(201).json(order);
     } catch (error) {
         next(error);

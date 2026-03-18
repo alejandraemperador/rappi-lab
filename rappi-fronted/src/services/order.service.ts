@@ -61,7 +61,7 @@ export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
 export const getUserOrders = async (userid: string): Promise<Order[]> => {
     try {
         if (!userid) {
-            throw new Error("userId es undefined");
+            throw new Error("userid es undefined");
         }
 
         const response = await axios.get(
@@ -80,7 +80,7 @@ export const getUserOrders = async (userid: string): Promise<Order[]> => {
 export const getStoreOrders = async (storeid: string): Promise<any> => {
     try {
         if (!storeid) {
-            throw new Error("storeId es undefined");
+            throw new Error("storeid es undefined");
         }
 
         const response = await axios.get(

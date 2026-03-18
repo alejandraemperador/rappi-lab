@@ -5,7 +5,6 @@ import { Order, AcceptOrderDTO, UpdateOrderStatusDTO } from "./orders.types";
 export const createOrderService = async (data: any) => {
     const { consumerid, storeid, total, items } = data;
 
-    // Aseguramos que los nombres de las columnas en el INSERT sean minúsculas
     const orderRes = await pool.query(
         'INSERT INTO orders (consumerid, storeid, total) VALUES ($1, $2, $3) RETURNING *',
         [consumerid, storeid, total]
@@ -18,10 +17,10 @@ export const createOrderService = async (data: any) => {
             await pool.query(
                 'INSERT INTO order_items (orderid, productid, quantity, priceattime) VALUES ($1, $2, $3, $4)',
                 [
-                    newOrder.id, 
-                    item.productid || item.productid, // Soporta ambos por si acaso
-                    item.quantity, 
-                    item.price || item.priceattime    // Soporta ambos
+                    newOrder.id,
+                    item.productid || item.productId, 
+                    item.quantity,
+                    item.price || item.priceattime
                 ]
             );
         }
@@ -99,7 +98,7 @@ export const getAvailableOrdersService = async (): Promise<Order[]> => {
 
 // 5. Aceptar pedido
 export const acceptOrderService = async (data: AcceptOrderDTO): Promise<Order> => {
-    const { id, deliveryid } = data; 
+    const { id, deliveryid } = data;
     const dbRequest = await pool.query(
         `UPDATE orders SET deliveryid = $2, status = 'accepted' WHERE id = $1 RETURNING *`,
         [id, deliveryid]
