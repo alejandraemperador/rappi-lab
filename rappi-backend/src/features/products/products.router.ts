@@ -3,6 +3,6 @@ import { createProductController, deleteProductController, getProductsByStoreCon
 
 export const router = Router ();
 
-router.get ('/stores/:storeId', getProductsByStoreController);
+router.get ('/stores/:storeid', getProductsByStoreController);
 router.post ('/', createProductController);
 router.delete ('/:id', deleteProductController);

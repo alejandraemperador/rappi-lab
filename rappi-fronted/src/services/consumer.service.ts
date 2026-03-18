@@ -7,7 +7,6 @@ const API_URL = "https://rappi-lab-backend-nine.vercel.app/api";
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
-
     return {
         headers: {
             Authorization: `Bearer ${token}`
@@ -15,21 +14,24 @@ const getAuthHeaders = () => {
     };
 };
 
+// Obtener tiendas
 export const getStores = async (): Promise<Store[]> => {
     const response = await axios.get(`${API_URL}/stores`, getAuthHeaders());
     return response.data;
 };
 
 export const getProductsByStore = async (storeid: string): Promise<Product[]> => {
-    const response = await axios.get(`${API_URL}/products/store/${storeid}`, getAuthHeaders());
+    const response = await axios.get(`${API_URL}/products/stores/${storeid}`, getAuthHeaders());
     return response.data;
 };
 
+// Crear orden
 export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
     const response = await axios.post(`${API_URL}/orders`, order, getAuthHeaders());
     return response.data;
 };
 
+// Órdenes del usuario
 export const getUserOrders = async (userid: string): Promise<Order[]> => {
     const response = await axios.get(`${API_URL}/orders/user/${userid}`, getAuthHeaders());
     return response.data;

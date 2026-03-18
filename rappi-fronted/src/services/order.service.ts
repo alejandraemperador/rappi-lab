@@ -7,6 +7,11 @@ const API_URL = "https://rappi-lab-backend-nine.vercel.app/api";
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.error("No hay token, el usuario no está autenticado");
+    }
+
     return {
         headers: {
             Authorization: `Bearer ${token}`
@@ -14,32 +19,78 @@ const getAuthHeaders = () => {
     };
 };
 
-// 1. Obtener todas las tiendas (Para el ConsumerLanding)
+
 export const getStores = async (): Promise<Store[]> => {
-    const response = await axios.get(`${API_URL}/stores`, getAuthHeaders());
-    return response.data;
+    try {
+        const response = await axios.get(`${API_URL}/stores`, getAuthHeaders());
+        return response.data;
+    } catch (error) {
+        console.error("Error obteniendo tiendas:", error);
+        throw error;
+    }
 };
 
-// 2. Obtener productos de una tienda (Para StoreDetail y StoreLanding)
+
 export const getProductsByStore = async (storeid: string): Promise<Product[]> => {
-    const response = await axios.get(`${API_URL}/products/stores/${storeid}`, getAuthHeaders());
-    return response.data;
+    try {
+        const response = await axios.get(
+            `${API_URL}/products/stores/${storeid}`,
+            getAuthHeaders()
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error obteniendo productos:", error);
+        throw error;
+    }
 };
 
-// 3. Crear una nueva orden (Para el carrito/StoreDetail)
 export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
-    const response = await axios.post(`${API_URL}/orders`, order, getAuthHeaders());
-    return response.data;
+    try {
+        const response = await axios.post(
+            `${API_URL}/orders`,
+            order,
+            getAuthHeaders()
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error creando orden:", error);
+        throw error;
+    }
 };
 
-// 4. Obtener órdenes de un USUARIO (Para la página Mis Pedidos / Orders.tsx)
 export const getUserOrders = async (userid: string): Promise<Order[]> => {
-    const response = await axios.get(`${API_URL}/orders/user/${userid}`, getAuthHeaders());
-    return response.data;
+    try {
+        if (!userid) {
+            throw new Error("userId es undefined");
+        }
+
+        const response = await axios.get(
+            `${API_URL}/orders/user/${userid}`,
+            getAuthHeaders()
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error obteniendo órdenes del usuario:", error);
+        throw error;
+    }
 };
 
-// 5. Obtener órdenes de una TIENDA (Para el Dashboard del dueño / StoreOrders.tsx)
+
 export const getStoreOrders = async (storeid: string): Promise<any> => {
-    const response = await axios.get(`${API_URL}/orders/store/${storeid}`, getAuthHeaders());
-    return response.data;
+    try {
+        if (!storeid) {
+            throw new Error("storeId es undefined");
+        }
+
+        const response = await axios.get(
+            `${API_URL}/orders/store/${storeid}`,
+            getAuthHeaders()
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error obteniendo órdenes de la tienda:", error);
+        throw error;
+    }
 };

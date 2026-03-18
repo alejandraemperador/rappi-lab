@@ -11,7 +11,7 @@ export const router = Router();
 // Obtener todas las tiendas
 router.get('/', getStoresController);
 
-router.get('/user/:userId', getStoreByUserIdController);
+router.get('/user/:userid', getStoreByUserIdController);
 
 // Crear tienda
 router.post('/', createStoreController);

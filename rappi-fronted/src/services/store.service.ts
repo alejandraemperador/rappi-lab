@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const API_URL = "https://rappi-lab-backend-nine.vercel.app/api";
 
 const getAuthHeaders = () => ({
@@ -11,7 +12,11 @@ export const getMyStore = async (userid: string) => {
 };
 
 export const toggleStoreStatus = async (storeid: string, isopen: boolean) => {
-    const response = await axios.patch(`${API_URL}/stores/${storeid}/status`, { isopen: isopen }, getAuthHeaders());
+    const response = await axios.patch(
+        `${API_URL}/stores/${storeid}/status`,
+        { isopen },
+        getAuthHeaders()
+    );
     return response.data;
 };
 
@@ -20,9 +25,10 @@ export const createProduct = async (productdata: any) => {
         name: productdata.name,
         description: productdata.description,
         price: Number(productdata.price),
-        imageUrl: productdata.imageurl,
-        storeId: productdata.storeid
+        imageurl: productdata.imageurl,
+        storeid: productdata.storeid
     };
+
     const response = await axios.post(`${API_URL}/products`, dataToSend, getAuthHeaders());
     return response.data;
 };
