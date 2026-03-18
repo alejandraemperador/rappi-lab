@@ -9,13 +9,13 @@ const getHeaders = () => ({
 });
 
 export const getAvailableOrders = async () => {
-    const response = await axios.get(`${API_URL}/available`, getHeaders());
+    const response = await axios.get(`${API_URL}/orders/available`, getHeaders());
     return response.data;
 };
 
 export const acceptOrder = async (orderid: string, deliveryid: string) => {
     const response = await axios.patch(
-        `${API_URL}/${orderid}/accept`,
+        `${API_URL}/orders/${orderid}/accept`,
         { deliveryid },
         getHeaders()
     );
@@ -23,13 +23,13 @@ export const acceptOrder = async (orderid: string, deliveryid: string) => {
 };
 
 export const getAcceptedOrders = async (deliveryid: string) => {
-    const response = await axios.get(`${API_URL}/delivery/${deliveryid}`, getHeaders());
+    const response = await axios.get(`${API_URL}/orders/delivery/${deliveryid}`, getHeaders());
     return response.data;
 };
 
 export const updateOrderStatus = async (orderid: string, status: string) => {
     const response = await axios.patch(
-        `${API_URL}/${orderid}/status`,
+        `${API_URL}/orders/${orderid}/status`,
         { status },
         getHeaders()
     );

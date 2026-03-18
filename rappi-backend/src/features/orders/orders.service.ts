@@ -80,12 +80,25 @@ export const getStoreOrdersService = async (storeid: string): Promise<any[]> => 
 };
 
 // 4. Pedidos disponibles para repartidores
-export const getAvailableOrdersService = async (): Promise<Order[]> => {
+export const getAvailableOrdersService = async (): Promise<any[]> => {
     const query = `
         SELECT 
             o.*, 
             s.name as store_name, 
-            u.name as customer_name
+            u.name as customer_name,
+            (
+                SELECT json_agg(
+                    json_build_object(
+                        'product_name', p.name,
+                        'product_image', p.imageurl,
+                        'product_price', oi.priceattime,
+                        'quantity', oi.quantity
+                    )
+                )
+                FROM order_items oi
+                JOIN products p ON oi.productid = p.id
+                WHERE oi.orderid = o.id
+            ) as items
         FROM orders o
         JOIN stores s ON o.storeid = s.id
         JOIN users u ON o.consumerid = u.id
