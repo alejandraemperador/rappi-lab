@@ -1,0 +1,36 @@
+import axios from "axios";
+import type { Order, CreateOrderDTO } from "../types/orders.types";
+import type { Store } from "../types/stores.types";
+import type { Product } from "../types/products.types";
+
+const API_URL = "http://localhost:1234/api";
+
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+
+    return {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+};
+
+export const getStores = async (): Promise<Store[]> => {
+    const response = await axios.get(`${API_URL}/stores`, getAuthHeaders());
+    return response.data;
+};
+
+export const getProductsByStore = async (storeId: string): Promise<Product[]> => {
+    const response = await axios.get(`${API_URL}/products/store/${storeId}`, getAuthHeaders());
+    return response.data;
+};
+
+export const createOrder = async (order: CreateOrderDTO): Promise<Order> => {
+    const response = await axios.post(`${API_URL}/orders`, order, getAuthHeaders());
+    return response.data;
+};
+
+export const getUserOrders = async (userId: string): Promise<Order[]> => {
+    const response = await axios.get(`${API_URL}/orders/user/${userId}`, getAuthHeaders());
+    return response.data;
+};
