@@ -4,7 +4,7 @@ import { CreateProductDTO, Product } from "./products.types";
 // Obtener productos de una tienda
 export const getProductsByStoreService = async (storeId: string): Promise <Product[]> => {
     const dbRequest = await pool.query(
-        'SELECT * FROM products WHERE storeId = $1',
+        'SELECT * FROM products WHERE storeid = $1',
         [storeId]
     );
     return dbRequest.rows;

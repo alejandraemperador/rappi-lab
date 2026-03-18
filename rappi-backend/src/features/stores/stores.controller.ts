@@ -20,7 +20,7 @@ export const createStoreController = async (req: Request, res: Response) => {
     const { name, userId } = req.body;
     
     if (!name || !userId) {
-        throw Boom.badRequest("name and userId are required");
+        throw Boom.badRequest("name and userid are required");
     }
     const store = await createStoreService({ name, userId })
     return res.json(store);

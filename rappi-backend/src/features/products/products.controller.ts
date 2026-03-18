@@ -14,7 +14,7 @@ export const getProductsByStoreController = async (req: Request, res: Response) 
 export const createProductController = async (req: Request, res: Response) => {
     const {name, description, price, imageUrl, storeId} = req.body;
     if (!name || !price || !storeId) {
-        throw Boom.badRequest ('name, price and storeId are required');
+        throw Boom.badRequest ('name, price and storeid are required');
     }
     const product = await createProductService ({
         name,

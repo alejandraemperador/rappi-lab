@@ -4,7 +4,10 @@ const API_URL = 'https://rappi-lab-backend-nine.vercel.app/api/orders';
 
 // Obtener pedidos en el "radar" (disponibles)
 export const getAvailableOrders = async () => {
-    const response = await axios.get(`${API_URL}/available`);
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/available`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 

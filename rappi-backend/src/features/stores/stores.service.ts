@@ -29,7 +29,7 @@ export const createStoreService = async (data: CreateStoreDTO): Promise<Store> =
     if (userRole !== 'store') throw Boom.forbidden("Only users with role 'store' can create it");
 
     const dbRequest = await pool.query(
-        `INSERT INTO stores (name, userId) VALUES ($1, $2) RETURNING *`,
+        `INSERT INTO stores (name, userid) VALUES ($1, $2) RETURNING *`,
         [name, userId]
     );
     return dbRequest.rows[0];

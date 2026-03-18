@@ -6,7 +6,7 @@ export const createOrderItemService = async (data: CreateOrderItemDTO) => {
 
     const { orderid, productid, quantity, priceAtTime } = data;
     await pool.query(
-    `INSERT INTO order_items (orderId, productId, quantity, priceAtTime)
+    `INSERT INTO order_items (orderId, productid, quantity, priceattime)
     VALUES ($1,$2,$3,$4)`,
         [orderid, productid, quantity, priceAtTime]
     );
