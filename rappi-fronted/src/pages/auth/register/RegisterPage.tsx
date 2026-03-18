@@ -19,19 +19,22 @@ export default function RegisterPage() {
         e.preventDefault();
         setLoading(true);
 
+        // Aseguramos que si es STORE, el storename no sea una cadena vacía
         const dataToSend = {
             name: formdata.name.trim(),
             email: formdata.email.trim(),
             password: formdata.password,
             role: formdata.role,
-            storename: formdata.role === UserRole.STORE ? formdata.storename.trim() : ""
+            storename: formdata.role === UserRole.STORE ? formdata.storename.trim() : undefined
         };
 
         try {
             await register(dataToSend);
-            alert("¡Registro completo!");
+            alert("¡Registro completo! Ahora puedes iniciar sesión.");
             navigate('/login');
-        } catch (error) {
+        } catch (error: any) {
+            // Agregamos un alert para saber qué falló exactamente
+            alert(error.response?.data?.message || "Error en el registro");
         } finally {
             setLoading(false);
         }

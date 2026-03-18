@@ -72,38 +72,28 @@ export default function StoreDetail() {
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
     const handleFinalize = async () => {
-        if (!userid) {
-            alert("Inicia sesión para realizar el pedido");
-            return;
-        }
+        if (!userid) return alert("Inicia sesión para pedir");
 
-        if (cart.length === 0) {
-            alert("El carrito está vacío");
-            return;
-        }
+        const orderData = {
+            consumerid: userid,
+            storeid: id as string,
+            total: total,
+            items: cart.map(item => ({
+                productid: item.id,
+                quantity: item.quantity,
+                priceattime: item.price
+            }))
+        };
 
         try {
-            const orderData = {
-                consumerid: userid,
-                storeid: id as string,
-                total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
-                items: cart.map((item) => ({
-                    productid: item.id,
-                    quantity: item.quantity,
-                    price: Number(item.price)
-                }))
-            };
-
-            console.log("Enviando pedido:", orderData);
-
             const response = await createOrder(orderData);
-
             if (response) {
                 alert("¡Pedido realizado con éxito!");
+                // ESTA ES LA LÍNEA QUE FALTA:
                 navigate('/orders');
             }
         } catch (error) {
-            console.error("Error al crear el pedido:", error);
+            console.error("Error:", error);
             alert("No se pudo procesar el pedido");
         }
     };

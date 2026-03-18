@@ -31,23 +31,21 @@ export default function Orders() {
     }, [userid]);
 
     const groupedOrders = orders.reduce((acc: any, order) => {
-        const storename = order.store_name || "Tienda";
-        if (!acc[storename]) acc[storename] = { items: [], subtotal: 0 };
+    const storename = order.store_name || "Tienda";
+    if (!acc[storename]) acc[storename] = { items: [], subtotal: 0 };
 
-        // Añade el encadenamiento opcional (?.) para evitar errores
-        order.items?.forEach((item: any) => {
-            const price = Number(item.price || item.priceattime || 0);
-            acc[storename].items.push({
-                ...item,
-                price: price, // Normaliza el nombre del precio
-                deliveryid: order.deliveryid,
-                orderId: order.id
-            });
-            acc[storename].subtotal += (price * item.quantity);
+    // Agregamos el signo '?' para que no se rompa si items es null
+    order.items?.forEach((item: any) => {
+        const itemPrice = Number(item.price || 0);
+        acc[storename].items.push({
+            ...item,
+            price: itemPrice
         });
+        acc[storename].subtotal += (itemPrice * item.quantity);
+    });
 
-        return acc;
-    }, {});
+    return acc;
+}, {});
 
     const totalGeneral = orders.reduce((acc, o) => acc + Number(o.total), 0);
 
