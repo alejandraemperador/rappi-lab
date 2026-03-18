@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://rappi-lab-backend-nine.vercel.app/api/orders';
+const API_URL = 'http://localhost:1234/api';
 
 const getHeaders = () => ({
     headers: {

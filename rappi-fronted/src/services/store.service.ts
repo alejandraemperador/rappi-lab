@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://rappi-lab-backend-nine.vercel.app/api";
+const API_URL = "http://localhost:1234/api";
 
 const getAuthHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
