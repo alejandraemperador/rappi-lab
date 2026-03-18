@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
         path: '/orders',
         element: <Orders />,
     },
-    // --- RUTAS DE STORE (DUEÑO) ---
+    // RUTAS DE STORE
     {
         path: "/store-landing",
         element: <StoreLanding />,
@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
         path: "/store-orders",
         element: <StoreOrders />,
     },
-    // --- RUTAS DE DELIVERY (REPARTIDOR) ---
+    // RUTAS DE DELIVERY
     {
         path: "/delivery-landing",
         element: <DeliveryLanding />,

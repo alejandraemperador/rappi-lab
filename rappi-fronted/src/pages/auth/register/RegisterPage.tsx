@@ -12,7 +12,7 @@ export default function RegisterPage() {
         email: '',
         password: '',
         role: UserRole.CONSUMER as UserRole,
-        storeName: '' // Campo para el perfil de tienda
+        storeName: '' 
     });
 
     const handleSubmit = async (e: React.FormEvent) => {

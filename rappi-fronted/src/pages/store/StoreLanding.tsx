@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StoreNavbar } from '../../components/store/landing/StoreNavbar';
 import { StoreHeader } from '../../components/store/landing/StoreHeader';
 import { ProductForm } from '../../components/store/landing/ProductForm';
-import { ProductCard } from '../../components/store/landing/ProductCard'; // Importamos el nuevo componente
+import { ProductCard } from '../../components/store/landing/ProductCard';
 import { getMyStore, toggleStoreStatus, createProduct, deleteProduct } from '../../services/store.service';
 import { getProductsByStore } from '../../services/order.service';
 
@@ -74,7 +74,6 @@ export default function StoreLanding() {
                             <h2 className="text-xl font-black text-gray-800 italic uppercase">Menú de la Tienda</h2>
                         </div>
 
-                        {/* El listado ahora usa el componente ProductCard */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {products.map(product => (
                                 <ProductCard
