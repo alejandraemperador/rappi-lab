@@ -8,28 +8,35 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
 
     const [formdata, setFormData] = useState({
+        //Este es el objeto que guarda todo lo que el usuario escribe.
         name: '',
         email: '',
         password: '',
         role: UserRole.CONSUMER as UserRole,
+        //empieza por defecto en consumer
         storename: ''
     });
 
+    //Se ejecuta cuando envías el formulario
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         // Aseguramos que si es STORE, el storename no sea una cadena vacía
+        // Aquí preparas lo que vas a mandar al backend
         const dataToSend = {
             name: formdata.name.trim(),
             email: formdata.email.trim(),
             password: formdata.password,
             role: formdata.role,
             storename: formdata.role === UserRole.STORE ? formdata.storename.trim() : undefined
+            //Si el rol es tienda, envía el nombre de la tienda.
+            // Si NO es tienda, ponlo como undefined (no lo envía)
         };
 
         try {
             await register(dataToSend);
+            //haces POST a /register, llamada al backend
             alert("¡Registro completo! Ahora puedes iniciar sesión.");
             navigate('/login');
         } catch (error: any) {
@@ -44,6 +51,7 @@ export default function RegisterPage() {
         <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4 font-sans">
             <form
                 onSubmit={handleSubmit}
+                //cuando envías registro → ejecuta handleSubmit
                 className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md flex flex-col gap-4 border-t-8 border-orange-500"
             >
                 <div className="text-center mb-2">
@@ -57,6 +65,7 @@ export default function RegisterPage() {
                         type="text"
                         placeholder="Tu nombre completo"
                         required
+                        //guarda el nombre en formdata
                         onChange={(e) => setFormData({ ...formdata, name: e.target.value })}
                     />
 
@@ -80,8 +89,9 @@ export default function RegisterPage() {
                         <label className="text-xs font-bold text-gray-400 uppercase ml-1">¿Qué quieres hacer?</label>
                         <select
                             className="border-2 border-orange-100 p-3 rounded-xl outline-none bg-orange-50 text-orange-700 font-bold"
-                            value={formdata.role}
+                            value={formdata.role}// muestra el rol actual
                             onChange={(e) => setFormData({ ...formdata, role: e.target.value as UserRole })}
+                            //actualiza el rol
                         >
                             <option value={UserRole.CONSUMER}>Quiero comprar comida</option>
                             <option value={UserRole.STORE}>Tengo un Restaurante / Tienda</option>
@@ -90,6 +100,7 @@ export default function RegisterPage() {
                     </div>
 
                     {formdata.role === UserRole.STORE && (
+                        //SOLO se muestra si eliges “store”
                         <div className="p-4 bg-orange-100 rounded-xl border-2 border-orange-200 animate-in fade-in duration-300">
                             <label className="text-xs font-black text-orange-700 uppercase block mb-2">Configuración de tu Tienda</label>
                             <input
@@ -97,6 +108,7 @@ export default function RegisterPage() {
                                 type="text"
                                 placeholder="Nombre comercial de la tienda"
                                 required={formdata.role === UserRole.STORE}
+                                //obligatorio solo si es tienda
                                 onChange={(e) => setFormData({ ...formdata, storename: e.target.value })}
                             />
                             <p className="text-[10px] text-orange-600 mt-2 italic font-medium">

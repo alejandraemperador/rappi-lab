@@ -2,12 +2,31 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
+import { router } from "./router/Router";
+import { SupabaseProvider } from "./providers/SupabaseProvider";
+import { OrderTrackingProvider } from "./providers/OrderTrackingProvider";
+
 import "./index.css";
-import { router } from "../src/router/Router";
+
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <RouterProvider router={router} />
-    </StrictMode>,
+        <SupabaseProvider>
+            <OrderTrackingProvider>
+                <RouterProvider router={router} />
+            </OrderTrackingProvider>
+        </SupabaseProvider>
+    </StrictMode>
 );

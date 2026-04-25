@@ -126,14 +126,17 @@ DELETE FROM products WHERE id = $1;
 ### Orders
 ```sql
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS postgis;
 
 CREATE TABLE orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     consumerid UUID NOT NULL REFERENCES users(id),
     storeid UUID NOT NULL REFERENCES stores(id),
     deliveryid UUID REFERENCES users(id),
-    status TEXT DEFAULT 'pending',
+    status TEXT DEFAULT 'Creado',
     total INTEGER DEFAULT 0,
+    delivery_position GEOGRAPHY(POINT,4326),
+    destination GEOGRAPHY(POINT,4326) NOT NULL,
     createdat TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
@@ -142,19 +145,21 @@ CREATE TABLE orders (
 ### createOrder
 -- El consumidor crea la orden (paso 1)
 ```sql
-INSERT INTO orders (consumerid, storeid, total)
-VALUES ($1, $2, $3)
-RETURNING *;
+INSERT INTO orders (consumerid, storeid, total, status, destination)
+VALUES ($1, $2, $3, 'Creado', ST_SetSRID(ST_MakePoint($4,$5),4326))
+RETURNING *,
+ST_Y(destination::geometry) as destination_lat,
+ST_X(destination::geometry) as destination_lng;
 ```
 ### getAvailableOrders
 -- Para el repartidor: Ver órdenes pendientes que no tienen repartidor
 ```sql
-SELECT * FROM orders WHERE status = 'pending' AND deliveryId IS NULL;
+SELECT * FROM orders WHERE status = 'Creado' AND deliveryid IS NULL;
 ```
 ### acceptOrder
 -- El repartidor acepta el pedido (paso 2)
 ```sql
-UPDATE orders SET deliveryid = $2, status = 'accepted' WHERE id = $1 RETURNING *;
+UPDATE orders SET deliveryid = $2, status = 'En entrega' WHERE id = $1 RETURNING *;
 ```
 ### updateOrderStatus
 -- Para cambiar a 'ready', 'on_way' o 'delivered'
@@ -163,7 +168,7 @@ UPDATE orders SET status = $2 WHERE id= $1 RETURNING *;
 ```
 ### getUserOrders
 ```sql
-SELECT * FROM orders WHERE consumerid = $1 OR deliveryId = $1 ORDER BY createdat DESC;
+SELECT * FROM orders WHERE consumerid = $1 OR deliveryid = $1 ORDER BY createdat DESC;
 ```
 
 ### Orders_items

@@ -7,26 +7,26 @@ import {
 } from '@supabase/supabase-js';
 import { pool } from '../../config/database';
 
-
-export const authenticateUserService = async (
-  credentials: AuthenticateUserDTO
-): Promise<AuthTokenResponsePassword['data']> => {
+// Login
+export const authenticateUserService = async (credentials: AuthenticateUserDTO) 
+  : Promise<AuthTokenResponsePassword['data']> => {
   const signInResponse = await supabase.auth.signInWithPassword({
     email: credentials.email,
     password: credentials.password,
-  });
+  }); 
 
   if (signInResponse.error) {
     throw Boom.unauthorized(signInResponse.error.message);
-  }
+  } 
 
   return signInResponse.data;
-};
+}; 
 
+// Registro
 
-export const createUserService = async (
-  user: CreateUserDTO
-): Promise<AuthResponse['data']> => {
+export const createUserService = async ( user: CreateUserDTO)
+  : Promise<AuthResponse['data']> => {
+
   const signUpResponse = await supabase.auth.signUp({
     email: user.email,
     password: user.password,
@@ -44,7 +44,7 @@ export const createUserService = async (
     throw Boom.badRequest(signUpResponse.error.message);
   }
 
-  const authUser = signUpResponse.data.user;
+  const authUser = signUpResponse.data.user; 
 
   if (!authUser) {
     throw Boom.internal('Error creating user in auth');
@@ -57,12 +57,11 @@ export const createUserService = async (
       [authUser.id, user.email, user.name, user.password, user.role]
     );
 
-    if (user.role === UserRole.STORE) {
+    if (user.role === UserRole.STORE) { 
 
       if (!user.storename || typeof user.storename !== 'string' || user.storename.trim() === '') {
         throw Boom.badRequest('Store name is required for store role');
       }
-
       await pool.query(
         `INSERT INTO stores (name, userid) VALUES ($1, $2)`,
         [user.storename.trim(), authUser.id]
